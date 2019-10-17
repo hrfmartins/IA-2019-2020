@@ -1,7 +1,7 @@
 import math
 import pickle
 import time
-
+from itertools import product
   
 class SearchProblem:
 
@@ -9,33 +9,81 @@ class SearchProblem:
     self.goal=goal
     self.model=model
     self.auxheur=auxheur
-    pass
+
 
   def search(self, init, limitexp = 2000, limitdepth = 10, tickets = [math.inf,math.inf,math.inf]):
-    Policia1=Policia(init[0],tickets)
-    openList=[]
-    InitNode=node(init[0],None)
-    openList=openList+[InitNode]
-    lastNode=searchSolution(InitNode,openList,self.goal,self.model)
+    initState=State(init,self.goal,[])
+    InitNode=Node(initState,None,0,tickets)
+    openList=[InitNode]
+    SolutionNode=searchSolution(InitNode,openList,self.goal,self.model)
 
 
     return []
 
 def searchSolution(Node,openList,goal,model):
-  if(Node.vertex==goal[0]):
-    return Node;
-  for i in model[Node.vertex]
+  if(stateFinal(Node)==True):
+    return Node
+  
+  state=Node.getState().getPos()
+  lstaux=[]
+  for i in state:
+    lstaux=lstaux+model[i]
+
+  lstaux=list(product(*lstaux))     #cria todas as combinacoes possiveis
+  
+  lstComb=[]
+  for i in lstaux:
+    lstComb=lstComb+[list(i)]       #converte os tuplos para lista para depois se puder eliminar o elemnto
+  
+  lstEliminateStates=eliminateStates(lstComb)          #elimina estados onde pelo menos 2 policias vao para o mesmo vertice
+
+
+    
+
+def eliminateStates(lstComb):
+  q=0;
+  z=0
+  while z<len(lstComb):
+      flag=0
+      i=lstComb[z]
+      for j in range(len(i)):
+          for k in range(len(i)):
+              if (k==j):
+                  continue
+              else:
+                  if(i[k][1]==i[j][1]):
+                      del lstComb[z]
+                      flag=1
+                      break
+                      
+          if(flag==1):
+              break
+      else:
+          z=z+1
+          
+                  
+  return lstComb
+
+
+def stateFinal(Node,goal):
+  if(Node.getState().getPos()==goal):
+    return True
+  return False
   
 
-class node:
-  def __init__(self,vertex,parent,g):
-    self.vertex=vertex
+class Node:
+  def __init__(self,state,parent,g,tickets):
+    self.state=state
     self.sucessores=[]
     self.parent=parent
+    self.tickets=tickets
     self.g=g
     self.h=1
-    self.f=g+self.h
+    self.f=self.h+self.g
   
+  def getTickets():
+    return self.tickets
+
   def setSucessores(lst):
     self.sucessores=lst
 
@@ -65,6 +113,9 @@ class node:
   
   def setSucessores(list):
     self.sucessores=list
+  
+  def getState():
+    return self.state
 
 
 
@@ -84,11 +135,23 @@ class Policia:
 
 
 class State:
-  def __init__(self):
-    lstState=[]
+  def __init__(self,pos,goal,trans):
+    self.pos=pos
+    self.trans=trans
+    self.goal=goal
+    
   
-  def setState(lst):
-    lstState=lst
+  def setPos(lst):
+    self.pos=lst
   
-  def getState():
-    return lstState
+  def getPos():
+    return self.pos
+  
+  def getTrans():
+    return self.trans
+  
+  
+
+
+  
+  
