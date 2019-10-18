@@ -24,6 +24,7 @@ def Bfs(inicial):
         print( " Node: " + str(i[1]) + " h : " + str(h))
         
         
+        
     
 
   
