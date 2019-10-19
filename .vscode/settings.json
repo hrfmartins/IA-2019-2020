@@ -1,6 +1,11 @@
 {
-    "python.pythonPath": "/usr/bin/python3",
+    "python.pythonPath": "/home/carla/.platformio/penv/bin/python",
     "python.linting.pylintEnabled": true,
     "python.linting.pydocstyleEnabled": false,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#172D52",
+        "titleBar.activeBackground": "#213F73",
+        "titleBar.activeForeground": "#F8FAFD"
+    }
 }
